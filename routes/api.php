@@ -19,8 +19,8 @@ use App\Http\Controllers\AuthController;
 // });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
+    Route::post('login', 'login')->name('login');
     Route::post('register', 'register');
-    Route::post('logout', 'logout');
+    Route::post('logout', 'logout')->name('logout');
     Route::post('refresh', 'refresh');
 });

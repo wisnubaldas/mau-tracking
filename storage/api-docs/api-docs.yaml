@@ -55,34 +55,8 @@ paths:
                 $ref: '#/components/schemas/User'
             application/xml:
               schema:
-                $ref: '#/components/schemas/User'
-  /user/createWithList:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      description: Creates list of users with given input array
-      operationId: createUsersWithListInput
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'          
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        default:
-          description: successful operation
-  /user/login:
+                $ref: '#/components/schemas/User'  
+  /login:
     post:
       tags:
         - user
@@ -90,9 +64,9 @@ paths:
       description: 'login into api dulu'
       operationId: loginUser
       parameters:
-        - name: username
+        - name: email
           in: query
-          description: The user name for login
+          description: Email login nya
           required: false
           schema:
             type: string
@@ -105,111 +79,30 @@ paths:
       responses:
         '200':
           description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
           content:
             application/xml:
               schema:
-                type: string
+                type: xml
             application/json:
               schema:
-                type: string
+                type: object
         '400':
           description: Invalid username/password supplied
-  /user/logout:
-    get:
+        '500':
+          description: Error validasi
+  /logout:
+    post:
       tags:
         - user
       summary: Logs out current logged in user session
-      description: ''
+      description: 'Logout session'
       operationId: logoutUser
       parameters: []
       responses:
-        default:
-          description: successful operation
-  /user/{username}:
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ''
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
-          required: true
-          schema:
-            type: string
-      responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'          
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
         '404':
-          description: User not found
-    put:
-      tags:
-        - user
-      summary: Update user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be deleted
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Update an existent user in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        default:
-          description: successful operation
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
+          description: Halaman tidak ditemukan
 components:
   schemas:
     User:
@@ -224,14 +117,6 @@ components:
         password:
           type: string
           example: '12345666666'
-        # phone:
-        #   type: string
-        #   example: '12345'
-        # userStatus:
-        #   type: integer
-        #   description: User Status
-        #   format: int32
-        #   example: 1
       xml:
         name: user
     ApiResponse:
@@ -256,15 +141,9 @@ components:
             items:
               $ref: '#/components/schemas/User'
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  security:
+  - bearerAuth: []
