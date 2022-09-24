@@ -1,0 +1,7 @@
+build website:
+  image: composer:latest
+  script:
+    - composer install
+  artifacts:
+    paths:
+      - ./apps
