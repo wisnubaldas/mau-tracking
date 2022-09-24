@@ -5,4 +5,4 @@ stages:
 build website:
   stage: build
   script:
-    - ls -la
+    - composer -v
