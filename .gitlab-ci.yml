@@ -6,6 +6,3 @@ build website:
   stage: build
   script:
     - ls -la
-  artifacts:
-    paths:
-      - ./apps
