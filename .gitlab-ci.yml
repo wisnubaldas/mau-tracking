@@ -1,8 +1,10 @@
-image: composer:latest
-stages:
-  - build
-
-build website:
-  stage: build
-  script:
-    - ls -la
+image: php:8.1
+cache:
+  paths:
+    - vendor/
+before_script:
+  - apt update -yqq
+  - apt install git libpq-dev libzip-dev zip -yqq
+  - docker-php-ext-install pdo_mysql pdo_pgsql zip
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install
