@@ -1,8 +1,8 @@
-image: composer:latest
+image: php:8.0.24RC1-zts-buster
 stages:
   - build
 
 build website:
   stage: build
   script:
-    - composer -v
+    - php -v
