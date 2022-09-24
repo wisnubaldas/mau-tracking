@@ -1,8 +1,19 @@
-image: php
-stages:
-  - build
+image: php:8.1
+# Select what we should cache
+cache:
+  paths:
+    - vendor/
 
-build website:
-  stage: build
-  script:
-    - php -v
+before_script:
+  # Install git, postgres and zip library, the php image doesn't have installed
+  - apt update -yqq
+  - apt install git libpq-dev libzip-dev zip -yqq
+
+  # Install database driver and zip
+  - docker-php-ext-install pdo_mysql pdo_pgsql zip
+
+  # Install composer
+  - curl -sS https://getcomposer.org/installer | php
+
+  # Install all project dependencies
+  - php composer.phar install
