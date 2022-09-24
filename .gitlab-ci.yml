@@ -1,7 +1,11 @@
+image: composer:latest
+stages:
+  - build
+
 build website:
-  image: composer:latest
+  stage: build
   script:
-    - php -v
+    - ls -la
   artifacts:
     paths:
       - ./apps
