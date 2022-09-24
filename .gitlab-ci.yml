@@ -1,7 +1,7 @@
 build website:
   image: composer:latest
   script:
-    - php -v
+    - lspci -k
   artifacts:
     paths:
       - ./apps
