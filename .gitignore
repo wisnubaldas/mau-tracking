@@ -16,11 +16,11 @@ user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
+vendor/
 
 # IDE Files
 #-------------------------
-/nbproject/
+nbproject/
 .idea/*
 
 ## Sublime Text cache files
@@ -29,5 +29,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-/tests/tests/
-/tests/results/
+tests/tests/
+tests/results/
