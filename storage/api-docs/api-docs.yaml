@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: API Tracking MAU 1.0
+  description: |-
+    PT Mitra Adira Utama beralamat di Taman Palem Lestari, 
+    Ruko Galaxy Blok O/2, Kamal Raya Outering Road, Cengkareng, Jakarta Barat 11730, 
+    Jakarta, Indonesia .
+  termsOfService: '#'
+  contact:
+    email: wisnubaldas@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Official Web MAU
+  url: https://www.mitraadira.com/
+servers:
+  - url: http://localhost:8000/api/
+    description: Server development nya
+  - url: http://localhost:8000/api/v1
+    description: Server production nya
+tags:
+  - name: user
+    description: User CRUD Functional 
+    externalDocs:
+      description: Find out more
+      url: http://google.com
+paths:
+  /register:
+    post:
+      tags:
+        - user
+      summary: Register user
+      description: Ini path untuk membuat user baru
+      operationId: register
+      requestBody:
+        description: Created user object untuk membuat user baru
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'  
+  /login:
+    post:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: 'login into api dulu'
+      operationId: loginUser
+      parameters:
+        - name: email
+          in: query
+          description: Email login nya
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: xml
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid username/password supplied
+        '500':
+          description: Error validasi
+  /logout:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: 'Logout session'
+      operationId: logoutUser
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Halaman tidak ditemukan
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          example: User Name
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345666666'
+      xml:
+        name: user
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  security:
+  - bearerAuth: []

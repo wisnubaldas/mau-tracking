@@ -5,7 +5,6 @@ production:
   only:
       - production
 
-
 development:
   script:
         - echo "Build development"
