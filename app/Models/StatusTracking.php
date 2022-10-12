@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class StatusTracking extends Model
 {
     use HasFactory;
+    // protected $fillable = ['stat','code'];
 }

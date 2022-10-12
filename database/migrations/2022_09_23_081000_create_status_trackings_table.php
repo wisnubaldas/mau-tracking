@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('stat');
             $table->string('code');
+            $table->string('desc');
             $table->timestamps();
         });
     }
