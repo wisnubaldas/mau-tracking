@@ -12,4 +12,3 @@ development:
         - $ssh_dev $script_dev
   only:
       - development
-
