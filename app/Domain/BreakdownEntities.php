@@ -11,5 +11,4 @@ class BreakdownEntities implements BreakdownInterface{
     {
         $this->data_breakdown = $data;
     }
-
 }
