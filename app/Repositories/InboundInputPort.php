@@ -5,7 +5,7 @@ use App\Domain\InboundEntities;
 use App\Models\Tps\Inbound;
 use App\Models\Warehouse\ImpBreakdownheader;
 
-class InboundInputPort implements InboundInterface {
+class InboundInputPort {
     public function count()
     {
         return ImpBreakdownheader::count();

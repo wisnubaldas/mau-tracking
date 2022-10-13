@@ -7,9 +7,12 @@ use App\Domain\BreakdownEntities;
 class BreakdownInputPort extends BreakdownEntities{
     public $counter;
     public $jml_breakdown;
+    public const FILE_COUNTER = 'br-header';
+    public const FILE_LIMIT = 'br-header-limit';
+    
     public function __construct() {
         $this->jml_breakdown = ImpBreakdownheader::count();
-        $this->counter = new CounterHandler('counter/breakdown_header');
+        $this->counter = new CounterHandler('counter/'.self::FILE_COUNTER);
     }
     public function get_breakdown()
     {

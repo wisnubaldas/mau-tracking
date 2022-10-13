@@ -39,6 +39,7 @@ class BreakdownOutputPort {
 
             // abis breakdown berapa jumlah master yg di breakdown
             foreach ($v->detail as $d) {
+                
                 // dapet host nya
                 $data_handler['waybill_smu'] = $d->MasterAWB;
                 $data_handler['koli'] = $d->Pieces;
@@ -47,43 +48,46 @@ class BreakdownOutputPort {
                 $data_handler['kindofgood'] = $d->KindOfGood;
                 $data_handler['airline_code'] = $d->AirlinesCode;
                 $data_handler['flight_no'] = $d->FlightNumber;
-                if($d->hosts->count() == 0)
-                {
-                    dump($d->MasterAWB);
-                    // $xx = ImpHostAwb::where('HostAWB',$d->MasterAWB)->get()->toArray();
-                    // dump($xx);
-                }else{
-                    foreach ($d->hosts as $h) {
-                        $data_handler['hawb'] = $h->HostAWB;
-                        $data_handler['shipper_name'] = $h->shippername;
-                        $data_handler['consignee_name'] = $h->Consigneename;
-                        $data_handler['consignee_name'] = $h->Consigneename;
-                        $data_handler['origin'] = $h->Origin;
-                        $data_handler['dest'] = 'CGK';
-                        $data_handler['_is_active'] = 1;
-                        $data_handler['_created_by'] = 'MY_APP';
-                        // array_push($arr,$data_handler);
-                        $idNya = Inbound::create($data_handler)->id_;
-                        
-                        TdInboundDeliveryAircarft::create([
-                            'id_header'=>$idNya,
-                            'status_date'=>Carbon::create('now')->format('Y-m-d'),
-                            'status_time'=>Carbon::create('now')->format('H:i'),
-                            '_is_active'=>1,
-                            '_created_by'=>'MY_APP'
-                        ]);
 
-                        TdInboundBreakdown::create([
-                            'id_header'=>$idNya,
-                            'status_date'=>Carbon::create('now')->format('Y-m-d'),
-                            'status_time'=>Carbon::create('now')->add('hour', 1)->format('H:i'),
-                            '_is_active'=>1,
-                            '_created_by'=>'MY_APP'
-                        ]);
 
-                        // $this->warehouse_log($data_handler,'th_inbound.log');
-                    }
-                }
+                // if($d->hosts->count() == 0)
+                // {
+                //     dump($d->MasterAWB);
+                //     // $xx = ImpHostAwb::where('HostAWB',$d->MasterAWB)->get()->toArray();
+                //     // dump($xx);
+                // }else{
+                //     foreach ($d->hosts as $h) {
+                //         $data_handler['hawb'] = $h->HostAWB;
+                //         $data_handler['shipper_name'] = $h->shippername;
+                //         $data_handler['consignee_name'] = $h->Consigneename;
+                //         $data_handler['consignee_name'] = $h->Consigneename;
+                //         $data_handler['origin'] = $h->Origin;
+                //         $data_handler['dest'] = 'CGK';
+                //         $data_handler['_is_active'] = 1;
+                //         $data_handler['_created_by'] = 'MY_APP';
+                //         // array_push($arr,$data_handler);
+                //         $idNya = Inbound::create($data_handler)->id_;
+                //         dump($data_handler);
+
+                //         TdInboundDeliveryAircarft::create([
+                //             'id_header'=>$idNya,
+                //             'status_date'=>Carbon::create('now')->format('Y-m-d'),
+                //             'status_time'=>Carbon::create('now')->format('H:i'),
+                //             '_is_active'=>1,
+                //             '_created_by'=>'MY_APP'
+                //         ]);
+
+                //         TdInboundBreakdown::create([
+                //             'id_header'=>$idNya,
+                //             'status_date'=>Carbon::create('now')->format('Y-m-d'),
+                //             'status_time'=>Carbon::create('now')->add('hour', 1)->format('H:i'),
+                //             '_is_active'=>1,
+                //             '_created_by'=>'MY_APP'
+                //         ]);
+
+                //         // $this->warehouse_log($data_handler,'th_inbound.log');
+                //     }
+                // }
                 
             }
            
