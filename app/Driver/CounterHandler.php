@@ -16,7 +16,12 @@ class CounterHandler {
     }
     public function get() : int
     {
-        return Storage::get($this->file);
+        $s = Storage::get($this->file);
+        if(!$s){
+            Storage::disk('local')->put($this->file, 0);
+            return 0;
+        }
+        return $s;
     }
     public function time_format($str)
     {
