@@ -19,4 +19,11 @@ trait LoggingRotateTrait {
             'path' => storage_path('logs/'.$file_name),
           ])->info(\json_encode($data));
     }
+    public function error_log(array $data,$file_name)
+    {
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path('logs/'.$file_name),
+          ])->error(\json_encode($data));
+    }
 }

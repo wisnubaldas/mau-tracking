@@ -9,4 +9,7 @@ class StatusTracking extends Model
 {
     use HasFactory;
     // protected $fillable = ['stat','code'];
+    protected $hidden = ['created_at','updated_at','id'];
+
+    
 }

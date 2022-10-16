@@ -5,9 +5,17 @@ namespace App\Repositories;
 use App\Models\Tps\Inbound;
 use App\Models\Tps\TdInboundBreakdown;
 use App\Models\Tps\TdInboundDeliveryAircarft;
+use App\Models\Tps\TdInboundStorage;
+use App\Models\Tps\TdInboundClearance;
+use App\Models\Tps\TdInboundPod;
+
 use App\Domain\BreakdownEntities;
 use App\Driver\LoggingRotateTrait;
 use App\Models\Warehouse\ImpHostAwb;
+use App\Models\Warehouse\ImpDeliorderheader;
+use App\Models\Warehouse\ImpPodheader;
+use App\Models\Warehouse\ImpPoddetail;
+
 use Carbon\Carbon;
 class BreakdownOutputPort {
     use LoggingRotateTrait;
@@ -39,7 +47,7 @@ class BreakdownOutputPort {
 
             // abis breakdown berapa jumlah master yg di breakdown
             foreach ($v->detail as $d) {
-                
+
                 // dapet host nya
                 $data_handler['waybill_smu'] = $d->MasterAWB;
                 $data_handler['koli'] = $d->Pieces;
@@ -50,50 +58,121 @@ class BreakdownOutputPort {
                 $data_handler['flight_no'] = $d->FlightNumber;
 
 
-                // if($d->hosts->count() == 0)
-                // {
-                //     dump($d->MasterAWB);
-                //     // $xx = ImpHostAwb::where('HostAWB',$d->MasterAWB)->get()->toArray();
-                //     // dump($xx);
-                // }else{
-                //     foreach ($d->hosts as $h) {
-                //         $data_handler['hawb'] = $h->HostAWB;
-                //         $data_handler['shipper_name'] = $h->shippername;
-                //         $data_handler['consignee_name'] = $h->Consigneename;
-                //         $data_handler['consignee_name'] = $h->Consigneename;
-                //         $data_handler['origin'] = $h->Origin;
-                //         $data_handler['dest'] = 'CGK';
-                //         $data_handler['_is_active'] = 1;
-                //         $data_handler['_created_by'] = 'MY_APP';
-                //         // array_push($arr,$data_handler);
-                //         $idNya = Inbound::create($data_handler)->id_;
-                //         dump($data_handler);
+                if($d->hosts->count() == 0)
+                {
+                    dump($d->MasterAWB);
+                    // $xx = ImpHostAwb::where('HostAWB',$d->MasterAWB)->get()->toArray();
+                    // dump($xx);
+                }else{
+                    foreach ($d->hosts as $h) {
+                        $data_handler['hawb'] = $h->HostAWB;
+                        $data_handler['shipper_name'] = $h->shippername;
+                        $data_handler['consignee_name'] = $h->Consigneename;
+                        $data_handler['consignee_name'] = $h->Consigneename;
+                        $data_handler['origin'] = $h->Origin;
+                        $data_handler['dest'] = 'CGK';
+                        $data_handler['_is_active'] = 1;
+                        $data_handler['_created_by'] = 'MY_APP';
 
-                //         TdInboundDeliveryAircarft::create([
-                //             'id_header'=>$idNya,
-                //             'status_date'=>Carbon::create('now')->format('Y-m-d'),
-                //             'status_time'=>Carbon::create('now')->format('H:i'),
-                //             '_is_active'=>1,
-                //             '_created_by'=>'MY_APP'
-                //         ]);
-
-                //         TdInboundBreakdown::create([
-                //             'id_header'=>$idNya,
-                //             'status_date'=>Carbon::create('now')->format('Y-m-d'),
-                //             'status_time'=>Carbon::create('now')->add('hour', 1)->format('H:i'),
-                //             '_is_active'=>1,
-                //             '_created_by'=>'MY_APP'
-                //         ]);
-
-                //         // $this->warehouse_log($data_handler,'th_inbound.log');
-                //     }
-                // }
+                        $id_header = $this->set_to_td_inbound($data_handler);
+                        $this->set_to_td_inbound_delivery_aircarft($id_header,$v->DateEntry,$v->TimeEntry);
+                        $this->td_inbound_breakdown($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown);
+                        $this->td_inbound_storage($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown);
+                        $this->td_inbound_clearance($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->MasterAWB);
+                        $this->td_inbound_pod($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->BreakdownNumber,$h->HostAWB);
+                    }
+                }
                 
             }
            
             $log['detail'][] = ['detail_id'=>$d->MasterAWB,'jml_hosts'=>$d->hosts->count()];
         }
-         $this->warehouse_log($log,'breakdown_count.log');
+         $this->warehouse_log($log,'wh.log');
+        
+    }
+    private function set_to_td_inbound($data)
+    {
+        $this->warehouse_log($data,'wh.log');
+        return Inbound::create($data)->id_;
+    }
+    private function set_to_td_inbound_delivery_aircarft($id,$date,$time)
+    {
+        $data = [
+            'id_header'=>$id,
+            'status_date'=>$date,
+            'status_time'=>$time,
+            '_is_active'=>1,
+            '_created_by'=>'MY_APP'
+        ];
+        TdInboundDeliveryAircarft::create($data);
+        $this->warehouse_log($data,'wh.log');
+
+    }
+    private function td_inbound_breakdown($id,$date,$time)
+    {
+        $data = [
+            'id_header'=>$id,
+            'status_date'=>$date,
+            'status_time'=>$time,
+            '_is_active'=>1,
+            '_created_by'=>'MY_APP'
+        ];
+        TdInboundBreakdown::create($data);
+        $this->warehouse_log($data,'wh.log');
+
+    }
+    private function td_inbound_storage($id,$date,$time)
+    {
+        $data = [
+            'id_header'=>$id,
+            'status_date'=>$date,
+            'status_time'=>Carbon::create($time)->add('hour', 1)->format('H:i'),
+            '_is_active'=>1,
+            '_created_by'=>'MY_APP'
+        ];
+        TdInboundStorage::create($data);
+        $this->warehouse_log($data,'wh.log');
+
+    }
+    public function td_inbound_clearance($id,$date,$time,$mawb)
+    {
+        $d = ImpDeliorderheader::where('MasterAWB',$mawb)->first();
+        if($d){
+            $date = $d->DateOfDeliveryOrder;
+            $time = $d->TimeOfDeliveryOrder;
+            $data = [
+                'id_header'=>$id,
+                'status_date'=>$date,
+                'status_time'=>$time,
+                '_is_active'=>1,
+                '_created_by'=>'MY_APP'
+            ];
+            TdInboundClearance::create($data);
+            $this->warehouse_log($data,'wh.log');
+        }else{
+            $this->error_log(compact('id','date','time','mawb'),'wh.log');
+        }
+        
+
+    }
+    private function td_inbound_pod($id,$date,$time,$breakdown,$hawb)
+    {
+        $inv = ImpPoddetail::with('header')->where('HostAWB',$hawb)->first();
+        if($inv)
+        {
+            $data = [
+                'id_header'=>$id,
+                'status_date'=>$inv->header->DateOfOut,
+                'status_time'=>$inv->header->TimeOfOut,
+                '_is_active'=>1,
+                '_created_by'=>'MY_APP'
+            ];
+    
+            TdInboundPod::create($data);
+            $this->warehouse_log($data,'wh.log');
+        }else{
+            $this->error_log(compact('id','date','time','hawb'),'wh.log');
+        }
         
     }
 }
