@@ -8,15 +8,8 @@ class SearchingController extends Controller
 {
     public function master_search(Request $request)
     {
-        $conten =  $request->all();
+        $conten =  $request->host;
         $t = new Tracking;
-        $mawb = $t->whereIn('mawb',$conten);
-        if($mawb->count() > 0){
-            return $mawb->get();
-        }
-        $hawb = $t->whereIn('hawb',$conten);
-        if($hawb->count() > 0){
-            return $hawb->get();
-        }
+        return $t->with('status')->where('hawb',$request->host)->get();
     }
 }

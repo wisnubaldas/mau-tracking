@@ -3,24 +3,23 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Repositories\InboundOutputPort;
+use App\Domain\SearchFactory;
 
-
-class InboundCommand extends Command
+class SearchFactoryCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:inbound';
+    protected $signature = 'run:search_factory';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Jalanin tarikan status tracking untuk inbound via cron tiap 1 menit';
+    protected $description = 'Generate data search dari table2 tps';
 
     /**
      * Execute the console command.
@@ -29,8 +28,9 @@ class InboundCommand extends Command
      */
     public function handle()
     {
-        $boot = InboundOutputPort::run();
-        $boot->push_into_tracking();
-        // return 0;
+        $x = new SearchFactory;
+        $x->get_aircarft_count();
+        $x->get_aircarft_data();
+        return 0;
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ManifestHeader extends Model
 {
     use HasFactory;
-    protected $connection= 'db_tpsonline';
+    protected $connection= 'mysql';
     protected $table = 'manifest_header';
     protected $primaryKey = 'nomor_aju';
     public $incrementing = false;
