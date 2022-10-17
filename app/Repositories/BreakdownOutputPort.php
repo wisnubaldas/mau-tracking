@@ -8,6 +8,8 @@ use App\Models\Tps\TdInboundDeliveryAircarft;
 use App\Models\Tps\TdInboundStorage;
 use App\Models\Tps\TdInboundClearance;
 use App\Models\Tps\TdInboundPod;
+use App\Models\Tps\GetImpIn;
+
 
 use App\Domain\BreakdownEntities;
 use App\Driver\LoggingRotateTrait;
@@ -60,14 +62,36 @@ class BreakdownOutputPort {
 
                 if($d->hosts->count() == 0)
                 {
-                    dump($d->MasterAWB);
-                    // $xx = ImpHostAwb::where('HostAWB',$d->MasterAWB)->get()->toArray();
-                    // dump($xx);
+                    // ini gratis ngga pake detail
+                    $getImpIn = GetImpIn::where('no_master_bl_awb',$d->MasterAWB)->first();
+                    if($getImpIn){
+                        $data_handler['hawb'] = $getImpIn->no_bl_awb;
+                        $data_handler['shipper_name'] = '';
+                        $data_handler['consignee_name'] = $getImpIn->consignee;
+                        $data_handler['origin'] = $getImpIn->pel_muat;
+                        $data_handler['dest'] = 'CGK';
+                        $data_handler['_is_active'] = 1;
+                        $data_handler['_created_by'] = 'MY_APP';
+                    }else{
+                        $data_handler['hawb'] = $d->MasterAWB;
+                        $data_handler['shipper_name'] = '';
+                        $data_handler['consignee_name'] = '';
+                        $data_handler['origin'] = '';
+                        $data_handler['dest'] = 'CGK';
+                        $data_handler['_is_active'] = 1;
+                        $data_handler['_created_by'] = 'MY_APP';
+                    }
+                    $id_header = $this->set_to_td_inbound($data_handler);
+                    $this->set_to_td_inbound_delivery_aircarft($id_header,$v->DateEntry,$v->TimeEntry);
+                    $this->td_inbound_breakdown($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown);
+                    $this->td_inbound_storage($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown);
+                    $this->td_inbound_clearance($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->MasterAWB);
+                    $this->td_inbound_pod($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->BreakdownNumber,$d->MasterAWB);
+                    $this->debug_log(['message'=>'Master '.$d->MasterAWB.' data aneh ngga ada host di prosess']);
                 }else{
                     foreach ($d->hosts as $h) {
                         $data_handler['hawb'] = $h->HostAWB;
                         $data_handler['shipper_name'] = $h->shippername;
-                        $data_handler['consignee_name'] = $h->Consigneename;
                         $data_handler['consignee_name'] = $h->Consigneename;
                         $data_handler['origin'] = $h->Origin;
                         $data_handler['dest'] = 'CGK';
@@ -80,14 +104,13 @@ class BreakdownOutputPort {
                         $this->td_inbound_storage($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown);
                         $this->td_inbound_clearance($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->MasterAWB);
                         $this->td_inbound_pod($id_header,$d->DateOfBreakdown,$d->TimeOfBreakdown,$d->BreakdownNumber,$h->HostAWB);
+                        $this->debug_log(['message'=>'Master '.$d->MasterAWB.' ada host nya normal prosess']);
                     }
                 }
                 
             }
            
-            $log['detail'][] = ['detail_id'=>$d->MasterAWB,'jml_hosts'=>$d->hosts->count()];
         }
-         $this->warehouse_log($log,'wh.log');
         
     }
     private function set_to_td_inbound($data)
