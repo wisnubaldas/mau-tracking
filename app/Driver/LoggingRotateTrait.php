@@ -12,18 +12,32 @@ trait LoggingRotateTrait {
           ])->info(\json_encode($data));
     }
 
-    public function warehouse_log(array $data,$file_name = 'warehouse.log')
+    public function warehouse_log(array $data,$file_name = 'my_apps.log')
     {
         Log::build([
             'driver' => 'single',
             'path' => storage_path('logs/'.$file_name),
           ])->info(\json_encode($data));
     }
-    public function error_log(array $data,$file_name)
+    public function error_log(array $data,$file_name = 'my_apps.log')
     {
         Log::build([
             'driver' => 'single',
             'path' => storage_path('logs/'.$file_name),
           ])->error(\json_encode($data));
+    }
+    public function debug_log(array $data,$file_name = 'my_apps.log')
+    {
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path('logs/'.$file_name),
+          ])->debug(\json_encode($data));
+    }
+    public function info_log(array $data,$file_name = 'my_apps.log')
+    {
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path('logs/'.$file_name),
+          ])->info(\json_encode($data));
     }
 }
