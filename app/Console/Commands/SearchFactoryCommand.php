@@ -28,9 +28,7 @@ class SearchFactoryCommand extends Command
      */
     public function handle()
     {
-        $x = new SearchFactory;
-        $x->get_aircarft_count();
-        $x->get_aircarft_data();
+        SearchFactory::run();
         return 0;
     }
 }
