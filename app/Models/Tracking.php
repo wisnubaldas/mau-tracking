@@ -14,6 +14,6 @@ class Tracking extends Model
     protected $hidden = ['created_at','updated_at','id','status_trackings_id'];
     public function status()
     {
-        return $this->belongsTo(StatusTracking::class);
+        return $this->belongsTo(StatusTracking::class,'status_trackings_id','id');
     }
 }
