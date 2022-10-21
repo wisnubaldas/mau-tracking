@@ -33,12 +33,12 @@ class SearchingController extends Controller
                 $k->storage->status = 'Storage';
             }
             if($k->clearance){
-                $k->storage->code = 'B4';
-                $k->storage->status = 'Custom & quarantine Clearance';
+                $k->clearance->code = 'B4';
+                $k->clearance->status = 'Custom & quarantine Clearance';
             }
-            if($k->clearance){
-                $k->storage->code = 'B5';
-                $k->storage->status = 'Received by consignee';
+            if($k->pod){
+                $k->pod->code = 'B5';
+                $k->pod->status = 'Received by consignee';
             }
 
             $x[$i] = $k;
