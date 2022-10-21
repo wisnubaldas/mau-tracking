@@ -10,7 +10,6 @@ class ImpHostAwb extends Model
     use HasFactory;
     protected $connection= 'rdwarehouse_jkt';
     protected $table = 'imp_hostawb';
-    // protected $primaryKey = 'nomor_aju';
-    // public $incrementing = false;
-    // protected $keyType = 'string';
+    protected $primaryKey = 'noid';
+    public $timestamps = false;
 }

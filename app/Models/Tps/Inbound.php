@@ -27,6 +27,9 @@ class Inbound extends Model
     'dest','consignee_name','airline_code','_updated_by','_updated_at','_remarks_last_update',
     '_is_active','_created_by','_created_at'];
 
+    protected $hidden = ['_updated_by','_updated_at','_remarks_last_update',
+    '_is_active','_created_by','_created_at','key_upload','full_check'];
+
     public function delivery_aircarft()
     {
         return $this->hasOne(TdInboundDeliveryAircarft::class,'id_header','id_');
