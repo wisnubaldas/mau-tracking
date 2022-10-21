@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Driver\Connection;
-use App\Driver\CounterHanler;
+use App\Repositories;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,13 +14,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
+        // $this->app->bind(
+        //     Repositories\WarehouseFactoryInterface::class,
+        //     Repositories\WarehouseEntities::class,
+        // );
+
         if(env('NUMBER_OF_CONNECTION') !== null && env('NUMBER_OF_CONNECTION') !== '')
         {
             $this->mergeConfigFrom(
                 __DIR__.'/../../config/connection.php','database.connections'
             );
         }
+
     }
 
     /**
@@ -32,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+    
 
     // public $bindings = [
     //     ServerProvider::class => CounterHanler::class,

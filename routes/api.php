@@ -29,4 +29,5 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(SearchingController::class)->group(function () {
     Route::post('search', 'master_search');
+    Route::post('pencarian', 'search_banyak');
 });
