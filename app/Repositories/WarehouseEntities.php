@@ -2,8 +2,9 @@
 namespace App\Repositories;
 use App\Driver\CounterTraits;
 use App\Driver\LoggingRotateTrait;
+use App\Driver\TimeTrait;
 class WarehouseEntities implements WarehouseFactoryInterface {
-    use CounterTraits, LoggingRotateTrait;
+    use CounterTraits, LoggingRotateTrait, TimeTrait;
 
     public $c_file;
 
@@ -44,16 +45,28 @@ class WarehouseEntities implements WarehouseFactoryInterface {
                         ->orderBy('noid','desc')
                         ->get();
     }
-    public function get_breakdown_detail_storage()
+    
+    public function get_deliorder($model,$limit)
     {
-        # code...
+        return $model::select(['MasterAWB','DateOfDeliveryOrder','TimeOfDeliveryOrder'])
+                        ->limit($limit)
+                        ->orderBy('noid','desc')
+                        ->get();
     }
-    public function get_deliorder()
+    public function get_pod($model,$limit)
     {
-        # code...
+        return $model::select(['DateOfOut','TimeOfOut','InvoiceNumber'])
+                        ->limit($limit)
+                        ->orderBy('noid','desc')
+                        ->get();
     }
-    public function get_pod()
+    public function get_pod_detail($model,$inv_number)
     {
-        # code...
+        $mawb = $model::select(['HostAWB'])->where('InvoiceNumber',$inv_number)->first();
+        if($mawb){
+            return $mawb->HostAWB;
+        }else{
+            $this->error_log(['message'=>'Error ngga ada master inv '.$inv_number],'warehouse.log');
+        }
     }
 }
