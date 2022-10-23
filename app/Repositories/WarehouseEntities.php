@@ -24,13 +24,11 @@ class WarehouseEntities implements WarehouseFactoryInterface {
     {
         return $model::where('MasterAWB',$master)->get();
     }
-    public function get_master($model,$limit = null)
+    public function get_master($model,$limit)
     {
-        if($limit){
             return $model::limit($limit)
                         ->orderBy('created_at','desc')
                         ->get();
-        }
     }
     public function get_breakdown($model,$limit)
     {
