@@ -15,6 +15,27 @@ class WarehouseFactory {
         $this->inputPort = new WarehouseImportInputPort();
         $this->outputPort = new WarehouseImportOutputPort();
     }
+    public function get_pod()
+    {
+        $order = $this->inputPort->pod_factory();
+        if($order)
+            $this->outputPort->save_to_pod($order);
+        return $this;
+    }
+    public function get_deliorder()
+    {
+        $order = $this->inputPort->deliorder_factory();
+        if($order)
+            $this->outputPort->save_to_clearances($order);
+        return $this;
+    }
+    public function get_storage()
+    {
+        $storage = $this->inputPort->storage_factory();
+        if($storage)
+            $this->outputPort->save_to_storage($storage);
+        return $this;
+    }
     public function get_breakdown_detail()
     {
         $br_data = $this->inputPort->breakdown_factory();
@@ -36,29 +57,14 @@ class WarehouseFactory {
         return $this;
     }
     
-    // public function breakdown()
-    // {
-    //     $limit = $this->inputPort->count_data(ImpBreakdownheader::class);
-    //     if($limit){
-    //         $data = $this->inputPort->get_breakdown(ImpBreakdownheader::class,$limit);
-    //         $collect = [];
-    //         foreach ($data as $i => $v) {
-    //             $collect[$i]['status_date'] = $v->DateEntry;
-    //             $collect[$i]['status_time'] = $v->TimeEntry;
-    //             $mawb = $this->inputPort->get_breakdown_detail(ImpBreakdownDetail::class,null,$v->BreakdownNumber);
-    //             if($mawb){
-    //                 $host_data = $this->inputPort->imp_host_awb(ImpHostAwb::class,$mawb->MasterAWB);
-    //                 if($host_data){
-    //                     dump($host_data);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
     static public function run()
     {
         $warehouse = new WarehouseFactory();
-        $warehouse->get_master()->get_breakdown_header()->get_breakdown_detail();
+        $warehouse->get_master()
+                    ->get_breakdown_header()
+                    ->get_breakdown_detail()
+                    ->get_storage()
+                    ->get_deliorder()
+                    ->get_pod();
     }
 }

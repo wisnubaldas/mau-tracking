@@ -4,15 +4,14 @@ namespace App\Models\Warehouse;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Warehouse\ImpPoddetail;
-class ImpPodheader extends Model
+
+class EksHostawb extends Model
 {
     use HasFactory;
     protected $connection= 'rdwarehouse_jkt';
-    protected $table = 'imp_podheader';
+    protected $table = 'eks_hostawb';
     protected $primaryKey = 'noid';
-    public function detail()
-    {
-        return $this->hasOne(ImpPoddetail::class,'InvoiceNumber','InvoiceNumber');
-    }
+    // public $incrementing = false;
+    // protected $keyType = 'string';
+    public $timestamps = false;
 }
