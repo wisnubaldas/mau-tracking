@@ -4,9 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
+use App\Console\CronJobTrait;
 class Kernel extends ConsoleKernel
 {
+    use CronJobTrait;
     /**
      * Define the application's command schedule.
      *
@@ -16,9 +17,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('run:breakdown')->dailyAt('00:00');
-        $schedule->command('run:search_factory')->dailyAt('02:00');
-        $schedule->command('run:warehouse_factory')->dailyAt('04:00');
+        self::breakdown($schedule);
+        self::search_factory($schedule);
+        self::warehouse_factory($schedule);
     }
 
     /**

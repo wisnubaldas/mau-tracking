@@ -93,12 +93,15 @@
                 <div class="card">
 
                     <div class="input-box">
-                        <input type="text" class="form-control">
-                        <i class="fa fa-search"></i>
+                        <form action="/api/pencarian" method="POST">
+                            @csrf
+                            <input type="text" class="form-control" name="host">
+                            <i class="fa fa-search" type="submit"></i>
+                        </form>
                     </div>
 
 
-                    <div class="list border-bottom">
+                    {{-- <div class="list border-bottom">
 
                         <i class="fa fa-fire"></i>
                         <div class="d-flex flex-column ml-3">
@@ -139,7 +142,7 @@
                             <span>Client communication policy</span>
                             <small>#politics - may - @max</small>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
 
