@@ -20,6 +20,7 @@ class WarehouseEntities implements WarehouseFactoryInterface {
             return 0;
          }
     }
+    
     public function get_host($model,$master)
     {
         return $model::where('MasterAWB',$master)->get();

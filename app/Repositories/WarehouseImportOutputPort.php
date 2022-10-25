@@ -24,6 +24,7 @@ class WarehouseImportOutputPort extends WarehouseEntities{
                 ];
                 TdInboundPod::updateOrCreate($head,$body);
                 $this->info_log(['to pod status '=>$head],'warehouse.log');
+                
                 $updt = $inbound->where('hawb',$v['hawb'])->update(['full_check'=>6]);
                 if($updt){
                     $this->info_log(['message'=>'Sukses update pod '.$v['hawb']],'warehouse.log');
