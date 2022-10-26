@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        self::breakdown($schedule);
+        $this->breakdown($schedule);
         self::search_factory($schedule);
         self::warehouse_factory($schedule);
     }
