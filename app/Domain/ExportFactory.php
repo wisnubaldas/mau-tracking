@@ -21,14 +21,19 @@ class ExportFactory
      * @return type
      * @throws conditon
      **/
-    protected function generate_th_outbound_host()
+    protected function mapping_td_outbond_acceptance()
+    {
+        $data = $this->inputPort->approval();
+        return $this;
+    }
+    protected function mapping_th_outbound_host()
     {
         $data = $this->inputPort->outbound_factory_detail();
         if($data)
             $this->outputPort->save_outbound($data);
         return $this;
     }
-    protected function generate_th_outbound()
+    protected function mapping_th_outbound()
     {
 
         $data = $this->inputPort->outbound_factory();
@@ -39,6 +44,8 @@ class ExportFactory
     static public function run()
     {
         $fk = new ExportFactory;
-        $fk->generate_th_outbound()->generate_th_outbound_host();
+        $fk->mapping_th_outbound()
+            ->mapping_th_outbound_host()
+            ->mapping_td_outbond_acceptance();
     }
 }

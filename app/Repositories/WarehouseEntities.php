@@ -68,4 +68,10 @@ class WarehouseEntities implements WarehouseFactoryInterface {
             $this->error_log(['message'=>'Error ngga ada master inv '.$inv_number],'warehouse.log');
         }
     }
+    public function get_exp_approval($model,$limit)
+    {
+        return $model::limit($limit)
+                        ->orderBy('noid','desc')
+                        ->get();
+    }
 }

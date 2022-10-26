@@ -6,7 +6,8 @@ class SearchFactoryOutputPort
     static public function save_to_tracking($data)
     {
         foreach ($data as $tracking) {
-            Tracking::create($tracking);
+            if($tracking['mawb'])
+                Tracking::create($tracking);
         }
     }
 }
