@@ -18,8 +18,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $this->breakdown($schedule);
-        self::search_factory($schedule);
-        self::warehouse_factory($schedule);
+        $this->search_factory($schedule);
+        $this->warehouse_factory($schedule);
+        $this->export_factory($schedule);
     }
 
     /**
