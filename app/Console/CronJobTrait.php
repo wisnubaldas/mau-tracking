@@ -5,6 +5,16 @@ use Carbon\Carbon;
 
 trait CronJobTrait {
     use LoggingRotateTrait;
+    public function export_factory($schedule)
+    {
+        $schedule->command('run:exp_factory')->dailyAt('05:00')
+            ->onSuccess(function () {
+                $this->info_log(['message'=>'cron inbound Export Sukses di eksekusi '],'cron.log');
+            })
+            ->onFailure(function () {
+                $this->error_log(['message'=>'cron inbound Export Error  ','cron.log']);
+            });
+    }
     public function warehouse_factory($schedule)
     {
         $schedule->command('run:warehouse_factory')->dailyAt('04:00')
