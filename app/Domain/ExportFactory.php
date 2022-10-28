@@ -21,9 +21,32 @@ class ExportFactory
      * @return type
      * @throws conditon
      **/
+    protected function mapping_to_outbond_buildup()
+    {
+        $data = $this->inputPort->buildup();
+        if($data)
+            $this->outputPort->save_buildup($data);
+        return $this;
+    }
+    protected function mapping_to_td_outbond_storage()
+    {
+        $data = $this->inputPort->storage();
+        if($data)
+            $this->outputPort->save_storage($data);
+        return $this;
+    }
+    protected function mapping_td_outbond_weighing()
+    {
+        $data = $this->inputPort->weighingvol();
+        if($data)
+            $this->outputPort->save_weighing($data);
+        return $this;
+    }
     protected function mapping_td_outbond_acceptance()
     {
         $data = $this->inputPort->approval();
+        if($data)
+            $this->outputPort->save_approval($data);
         return $this;
     }
     protected function mapping_th_outbound_host()
@@ -46,6 +69,9 @@ class ExportFactory
         $fk = new ExportFactory;
         $fk->mapping_th_outbound()
             ->mapping_th_outbound_host()
-            ->mapping_td_outbond_acceptance();
+            ->mapping_td_outbond_acceptance()
+            ->mapping_td_outbond_weighing()
+            ->mapping_to_td_outbond_storage()
+            ->mapping_to_outbond_buildup();
     }
 }

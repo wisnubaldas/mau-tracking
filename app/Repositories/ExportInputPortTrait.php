@@ -5,6 +5,7 @@ namespace App\Repositories;
  */
 trait ExportInputPortTrait
 {
+    
     public function get_host($model,$limit)
     {
         return $model::limit($limit)
