@@ -3,6 +3,11 @@ namespace App\Repositories;
 use App\Models\Warehouse\EksMasterwaybill;
 use App\Models\Warehouse\EksHostawb;
 use App\Models\Warehouse\EksApproval;
+use App\Models\Warehouse\EksWeighingvol;
+use App\Models\Warehouse\EksStorage;
+use App\Models\Warehouse\EksBuildupdetail;
+use App\Models\Warehouse\EksBuildupheader;
+
 use App\Repositories\ExportInputPortTrait;
 /**
  * buat narik data export class
@@ -22,16 +27,77 @@ class WarehouseExportInputPort extends WarehouseEntities
     const COUNT_EXP_MASTER = 'EXP_MASTER';
     const COUNT_EXP_DETAIL = 'EXP_HOST';
     const C_APPROVAL = 'EXP_APPROVAL';
-
+    const C_WEIGHTVOL = 'EXP_WEIGHTVOL'; 
+    const C_STORAGE = 'EXP_STORAGE';
+    const C_BUILDUP = 'EXP_BUILDUP';
+    
     use ExportInputPortTrait;
     
+    public function buildup()
+    {
+        $this->c_file = 'counter/'.self::C_BUILDUP;
+        $limit = $this->count_data(EksBuildupheader::class);
+        if($limit){
+            $result = [];
+            $data = $this->get_breakdown_detail(EksBuildupheader::class,$limit);
+            foreach ($data as $bh) {
+                $detail = EksBuildupdetail::where('BuildupNumber',$bh->BuildupNumber);
+                if($detail->count() > 0){
+                    foreach ($detail->get() as $bd) {
+                        $host = EksHostawb::where('MasterAWB',$bd->MasterAWB)->get();
+                        if($host){
+                            foreach ($host as $i => $h) {
+                                $result[$i]['host'] = $h->HostAWB;
+                                $result[$i]['DateEntry'] = $bh->DateEntry;
+                                $result[$i]['TimeEntry'] = $bh->TimeEntry;
+                            }
+                        }
+                        // dump($bh->BuildupNumber,'masternya '.$bd->MasterAWB,'jumlah host',$host);
+                    }
+                }
+            }
+            $this->info_log(['Proses data build_up '.count($result).' Host']);
+            return $result;
+        }else{
+            $this->debug_log(['Tidak ada data export storage ']);
+        }
+    }
+    public function storage()
+    {
+        $this->c_file = 'counter/'.self::C_STORAGE;
+        $limit = $this->count_data(EksStorage::class);
+        if($limit){
+            return $this->get_breakdown_detail(EksStorage::class,$limit);
+        }else{
+            $this->debug_log(['Tidak ada data export storage ']);
+        }
+
+    }
+
+    /**
+     * Weighingvol ngeluarin 2 status 
+     * Manifesting dan Storage Position
+     *
+     * @return void
+     */
+    public function weighingvol()
+    {
+        $this->c_file = 'counter/'.self::C_WEIGHTVOL;
+        $limit = $this->count_data(EksWeighingvol::class);
+        if($limit){
+            return $this->get_breakdown_detail(EksWeighingvol::class,$limit);
+        }else{
+            $this->debug_log(['Tidak ada data export weight volume ']);
+        }
+    }
     public function approval()
     {
         $this->c_file = 'counter/'.self::C_APPROVAL;
         $limit = $this->count_data(EksApproval::class);
         if($limit){
-            $data = $this->get_exp_approval(EksApproval::class,$limit);
-            dump($data);
+            return $this->get_exp_approval(EksApproval::class,$limit);
+        }else{
+            $this->debug_log(['Tidak ada data export approval ']);
         }
         
     }
