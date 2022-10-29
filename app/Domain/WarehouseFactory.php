@@ -137,8 +137,8 @@ class WarehouseFactory {
         $warehouse->get_master()
                     ->get_breakdown_header()
                     ->get_breakdown_detail()
-                    ->get_storage();
-                    // ->get_deliorder()
-                    // ->get_pod();
+                    ->get_storage()
+                    ->get_deliorder()
+                    ->get_pod();
     }
 }

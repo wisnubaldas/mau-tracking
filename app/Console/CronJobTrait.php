@@ -9,10 +9,10 @@ trait CronJobTrait {
     {
         $schedule->command('run:exp_factory')->dailyAt('05:00')
             ->onSuccess(function () {
-                $this->info_log(['message'=>'cron inbound Export Sukses di eksekusi '],'cron.log');
+                $this->info_log(['message'=>'cron Export Sukses di eksekusi '],'cron.log');
             })
             ->onFailure(function () {
-                $this->error_log(['message'=>'cron inbound Export Error  ','cron.log']);
+                $this->error_log(['message'=>'cron Export Error  '],'cron.log');
             });
     }
     public function warehouse_factory($schedule)
