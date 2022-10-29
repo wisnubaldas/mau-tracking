@@ -6,26 +6,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Repositories\WarehouseImportOutputPort;
 use App\Driver\LoggingRotateTrait;
+use Jenssegers\Agent\Agent;
 
 class TpsApiController extends Controller
 {
     use LoggingRotateTrait;
     public $repo;
+    protected $agent;
     public function __construct() {
         $this->repo = new WarehouseImportOutputPort();
+        $this->agent = new Agent();
     }
     public function cek_token($token)
     {
+        // $this->log_api($request->ip(),$request->host,$this->agent);
         try {
             $decrypted = Crypt::decrypt($token);
             if($decrypted == env('TOKEN_API')){
                 return true;
             }else{
+                $this->error_log(['message'=>'token tidak cocok ']);
                 return response()->json(['message'=>'Token tidak cocok'],500);
             }
         } catch (DecryptException $e) {
             $e->getMessage();
-            info("Error.... token bermasalah......!!!");
+            $this->error_log(['message'=>'token tidak cocok ']);
         }
     }
 
@@ -34,8 +39,8 @@ class TpsApiController extends Controller
         $token = $request->header('X-XSRF-TOKEN');
         $token = $this->cek_token($token);
         if($token){
-            $this->info_log([$request->all()],'api.log');
             $this->repo->save_to_inbound([$request->all()]);
+            $this->log_api($request->ip(),$request->host,$this->agent);
             return response()->json(['message'=>'Sukses insert data'],200);
         }
     }
@@ -56,6 +61,7 @@ class TpsApiController extends Controller
         if($token)
         {
             $this->repo->save_to_aircarft(json_decode($request->data,true));
+            $this->log_api($request->ip(),$request->host,$this->agent);
             return response()->json(['message'=>'Sukses insert data'],200);
         }
         
@@ -76,6 +82,7 @@ class TpsApiController extends Controller
         if($token)
         {
             $this->repo->save_to_breakdown(json_decode($request->data,true));
+            $this->log_api($request->ip(),$request->host,$this->agent);
             return response()->json(['message'=>'Sukses insert data'],200);
         }
     }
@@ -95,6 +102,8 @@ class TpsApiController extends Controller
         if($token)
         {
             $this->repo->save_to_storage(json_decode($request->data,true));
+            $this->log_api($request->ip(),$request->host,$this->agent);
+
             return response()->json(['message'=>'Sukses insert data'],200);
         }
     }
@@ -106,6 +115,8 @@ class TpsApiController extends Controller
         if($token)
         {
             $this->repo->save_to_clearances(json_decode($request->data,true));
+            $this->log_api($request->ip(),$request->host,$this->agent);
+
             return response()->json(['message'=>'Sukses insert data'],200);
         }
     }
@@ -117,7 +128,22 @@ class TpsApiController extends Controller
         if($token)
         {
             $this->repo->save_to_pod(json_decode($request->data,true));
+            $this->log_api($request->ip(),$request->host,$this->agent);
+
             return response()->json(['message'=>'Sukses insert data'],200);
         }
+    }
+    protected function log_api($ip,$host,$agent)
+    {
+        $this->info_log([
+                        'message'=>[
+                                    'host'=>$host,
+                                    'ip'=>$ip,
+                                    'robot'=>$agent->robot(),
+                                    'browser'=>$agent->browser(),
+                                    'device'=>$agent->device(),
+                                    'platform'=>$agent->platform()
+                                ]
+                        ],'api.log');
     }
 }

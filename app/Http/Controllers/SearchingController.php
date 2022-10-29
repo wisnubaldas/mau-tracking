@@ -27,37 +27,9 @@ class SearchingController extends Controller
         $agent = new Agent();
         $this->log_api($request->ip(),$request->host,$agent);
 
-        $d = Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
+        return Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
                         ->where('hawb',$request->host)
                         ->get();
-        if($d){
-            $x = [];
-            foreach ($d as $i => $k) {
-                if($k->delivery_aircarft){
-                    $k->delivery_aircarft->code = 'B1';
-                    $k->delivery_aircarft->status = 'Delivery from aircraft to incoming warehouse';
-                }
-                if($k->breakdown){
-                    $k->breakdown->code = 'B2';
-                    $k->breakdown->status = 'Arrival at Incoming warehouse';
-                }
-                if($k->storage){
-                    $k->storage->code = 'B3';
-                    $k->storage->status = 'Storage';
-                }
-                if($k->clearance){
-                    $k->clearance->code = 'B4';
-                    $k->clearance->status = 'Custom & quarantine Clearance';
-                }
-                if($k->pod){
-                    $k->pod->code = 'B5';
-                    $k->pod->status = 'Received by consignee';
-                }
-                $x[$i] = $k;
-            }
-            return $x;
-        }
-
     }
     protected function log_api($ip,$host,$agent)
     {
