@@ -107,7 +107,7 @@ class WarehouseImportInputPort extends WarehouseEntities {
         if($data){
             $result = [];
             foreach ($data as $i => $v) {
-                $result[$i]['tps'] = 'MAU1';
+                $result[$i]['tps'] = env('KD_GUDANG');
                 $result[$i]['gate_type'] = 'import';
                 $result[$i]['waybill_smu'] = $v->MasterAWB;
                 $result[$i]['hawb'] = $v->HostAWB;
