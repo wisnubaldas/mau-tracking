@@ -7,7 +7,6 @@ use App\Models\Warehouse\EksWeighingvol;
 use App\Models\Warehouse\EksStorage;
 use App\Models\Warehouse\EksBuildupdetail;
 use App\Models\Warehouse\EksBuildupheader;
-
 use App\Repositories\ExportInputPortTrait;
 /**
  * buat narik data export class
@@ -30,6 +29,7 @@ class WarehouseExportInputPort extends WarehouseEntities
     const C_WEIGHTVOL = 'EXP_WEIGHTVOL'; 
     const C_STORAGE = 'EXP_STORAGE';
     const C_BUILDUP = 'EXP_BUILDUP';
+    const LOG = 'export.log';
     
     use ExportInputPortTrait;
     
@@ -56,10 +56,10 @@ class WarehouseExportInputPort extends WarehouseEntities
                     }
                 }
             }
-            $this->info_log(['Proses data build_up '.count($result).' Host']);
+            $this->info_log(['Proses data build_up '.count($result).' Host'],self::LOG);
             return $result;
         }else{
-            $this->debug_log(['Tidak ada data export storage ']);
+            $this->debug_log(['Tidak ada data export storage '],self::LOG);
         }
     }
     public function storage()
@@ -69,7 +69,7 @@ class WarehouseExportInputPort extends WarehouseEntities
         if($limit){
             return $this->get_breakdown_detail(EksStorage::class,$limit);
         }else{
-            $this->debug_log(['Tidak ada data export storage ']);
+            $this->debug_log(['Tidak ada data export storage '],self::LOG);
         }
 
     }
@@ -87,7 +87,7 @@ class WarehouseExportInputPort extends WarehouseEntities
         if($limit){
             return $this->get_breakdown_detail(EksWeighingvol::class,$limit);
         }else{
-            $this->debug_log(['Tidak ada data export weight volume ']);
+            $this->debug_log(['Tidak ada data export weight volume '],self::LOG);
         }
     }
     public function approval()
@@ -97,7 +97,7 @@ class WarehouseExportInputPort extends WarehouseEntities
         if($limit){
             return $this->get_exp_approval(EksApproval::class,$limit);
         }else{
-            $this->debug_log(['Tidak ada data export approval ']);
+            $this->debug_log(['Tidak ada data export approval '],self::LOG);
         }
         
     }
@@ -137,11 +137,11 @@ class WarehouseExportInputPort extends WarehouseEntities
                             
                         }
                     }else{
-                        $this->error_log(['message'=>'inbound export detail Master atau host null tidak bisa di proses']);
+                        $this->error_log(['inbound export detail Master atau host null tidak bisa di proses'],self::LOG);
                     }
                 }
 
-                $this->info_log(['message'=>'outhbound export detail master, '.$jml_host.' host bisa di proses']);
+                $this->info_log(['outhbound export detail master, '.$jml_host.' host bisa di proses'],self::LOG);
                 return $result;
             }
         }
@@ -157,9 +157,11 @@ class WarehouseExportInputPort extends WarehouseEntities
                 $result = [];
                 foreach ($data as $e) {
                     $host = $this->get_host(EksHostawb::class,$e->MasterAWB);
+                    $this->debug_log(['outbound_factory master '.$e->MasterAWB],self::LOG);
                     if($host){
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
+                                $this->debug_log(['outbound_factory dapet hostnya '.$e->HostAWB],self::LOG);
                                 $result[$i]['tps'] = env('KD_GUDANG');
                                 $result[$i]['gate_type'] = 'ekspor';
                                 $result[$i]['waybill_smu'] = $v->MasterAWB;
