@@ -10,7 +10,7 @@ class EksMasterwaybill extends Model
     use HasFactory;
     protected $connection= 'rdwarehouse_jkt';
     protected $table = 'eks_masterwaybill';
-    protected $primaryKey = 'MasterAwb';
+    protected $primaryKey = 'MasterAWB';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
