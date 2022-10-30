@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tracking;
 use App\Models\Tps\Inbound;
+use App\Models\Tps\ThOutbound;
 use App\Driver\LoggingRotateTrait;
 use Jenssegers\Agent\Agent;
 
@@ -26,35 +27,22 @@ class SearchingController extends Controller
         $agent = new Agent();
         $this->log_api($request->ip(),$request->host,$agent);
 
-        $d = Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
+        $inbound = Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
                         ->where('hawb',$request->host)
-                        ->get();
-        $x = [];
-        foreach ($d as $i => $k) {
-            if($k->delivery_aircarft){
-                $k->delivery_aircarft->code = 'B1';
-                $k->delivery_aircarft->status = 'Delivery from aircraft to incoming warehouse';
-            }
-            if($k->breakdown){
-                $k->breakdown->code = 'B2';
-                $k->breakdown->status = 'Arrival at Incoming warehouse';
-            }
-            if($k->storage){
-                $k->storage->code = 'B3';
-                $k->storage->status = 'Storage';
-            }
-            if($k->clearance){
-                $k->clearance->code = 'B4';
-                $k->clearance->status = 'Custom & quarantine Clearance';
-            }
-            if($k->pod){
-                $k->pod->code = 'B5';
-                $k->pod->status = 'Received by consignee';
-            }
-
-            $x[$i] = $k;
+                        ->first();
+        if($inbound){
+            return response()->json($inbound,200);
         }
-        return $x;
+        $outbound = ThOutbound::with(['acceptance','weighing','manifest',
+                                        'storage','buildup','staging','aircarft'])
+                            ->where('hawb',$request->host)
+                            ->first();
+
+        if($outbound){
+            return response()->json($outbound,200);
+        }
+
+        return response()->json(['message'=>'Tidak ada data tracking untuk hawb '.$request->host],500);
     }
     protected function log_api($ip,$host,$agent)
     {

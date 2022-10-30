@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SearchingController;
+use App\Http\Controllers\TpsApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,13 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(SearchingController::class)->group(function () {
     Route::post('search', 'master_search');
     Route::post('pencarian', 'search_banyak');
+});
+
+Route::controller(TpsApiController::class)->group(function () {
+    Route::post('th-inbound', 'th_inbound');
+    Route::post('th-aircarft', 'th_aircarft');
+    Route::post('th-breakdown', 'th_breakdown');
+    Route::post('th-storage', 'th_storage');
+    Route::post('th-clearance', 'th_clearance');
+    Route::post('th-pod', 'th_pod');
 });

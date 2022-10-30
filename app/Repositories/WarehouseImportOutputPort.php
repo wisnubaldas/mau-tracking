@@ -108,20 +108,22 @@ class WarehouseImportOutputPort extends WarehouseEntities{
     }
     public function save_to_aircarft($data)
     {
-        foreach ($data as $k => $v) {
-            $inbound = Inbound::whereIn('waybill_smu',$v['master']);
-                foreach ($inbound->get()->pluck('id_') as $idx) {
-                    $head = ['id_header'=>$idx];
-                    $body = [
-                        '_is_active'=>1,
-                        '_created_by'=>'MY_APP',
-                        'status_date'=>$v['status_date'],
-                        'status_time'=>$v['status_time'],
-                    ];
-                    TdInboundDeliveryAircarft::updateOrCreate($head,$body);
-                    $this->info_log(['to delivery aircarft'=>$head],'warehouse.log');
-                }
-            $inbound->update(['full_check'=>2]);
+        if($data){
+            foreach ($data as $k => $v) {
+                $inbound = Inbound::whereIn('waybill_smu',$v['master']);
+                    foreach ($inbound->get()->pluck('id_') as $idx) {
+                        $head = ['id_header'=>$idx];
+                        $body = [
+                            '_is_active'=>1,
+                            '_created_by'=>'MY_APP',
+                            'status_date'=>$v['status_date'],
+                            'status_time'=>$v['status_time'],
+                        ];
+                        TdInboundDeliveryAircarft::updateOrCreate($head,$body);
+                        $this->info_log(['to delivery aircarft'=>$head],'warehouse.log');
+                    }
+                $inbound->update(['full_check'=>2]);
+            }
         }
     }
     public function save_to_inbound(array $data)

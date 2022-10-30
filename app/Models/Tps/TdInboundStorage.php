@@ -18,4 +18,13 @@ class TdInboundStorage extends Model
     
     // public $incrementing = false;
     // protected $keyType = 'string';
+    protected $appends = ['code','status'];
+    public function getCodeAttribute()
+    {
+        return 'B3';
+    }
+    public function getStatusAttribute()
+    {
+        return 'Storage Postion';
+    }
 }

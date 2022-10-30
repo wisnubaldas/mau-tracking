@@ -118,7 +118,7 @@ class WarehouseExportInputPort extends WarehouseEntities
                         foreach ($v as $h) {
                             $jml_host++;
 
-                            $result[$jml_host]['tps'] = 'MAU1';
+                            $result[$jml_host]['tps'] = env('KD_GUDANG');
                             $result[$jml_host]['gate_type'] = 'ekspor';
                             $result[$jml_host]['waybill_smu'] = $h->MasterAWB;
                             $result[$jml_host]['hawb'] = $h->HostAWB;
@@ -160,7 +160,7 @@ class WarehouseExportInputPort extends WarehouseEntities
                     if($host){
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
-                                $result[$i]['tps'] = 'MAU1';
+                                $result[$i]['tps'] = env('KD_GUDANG');
                                 $result[$i]['gate_type'] = 'ekspor';
                                 $result[$i]['waybill_smu'] = $v->MasterAWB;
                                 $result[$i]['hawb'] = $v->HostAWB;
