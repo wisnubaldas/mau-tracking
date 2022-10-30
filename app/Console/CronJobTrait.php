@@ -7,7 +7,7 @@ trait CronJobTrait {
     use LoggingRotateTrait;
     public function export_factory($schedule)
     {
-        $schedule->command('run:exp_factory')->dailyAt('05:00')
+        $schedule->command('run:exp_factory')->dailyAt('03:00')
             ->onSuccess(function () {
                 $this->info_log(['message'=>'cron Export Sukses di eksekusi '],'cron.log');
             })

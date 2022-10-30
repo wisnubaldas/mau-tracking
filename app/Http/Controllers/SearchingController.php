@@ -27,9 +27,22 @@ class SearchingController extends Controller
         $agent = new Agent();
         $this->log_api($request->ip(),$request->host,$agent);
 
-        return Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
+        $inbound = Inbound::with(['delivery_aircarft','breakdown','storage','clearance','pod'])
                         ->where('hawb',$request->host)
-                        ->get();
+                        ->first();
+        if($inbound){
+            return response()->json($inbound,200);
+        }
+        $outbound = ThOutbound::with(['acceptance','weighing','manifest',
+                                        'storage','buildup','staging','aircarft'])
+                            ->where('hawb',$request->host)
+                            ->first();
+
+        if($outbound){
+            return response()->json($outbound,200);
+        }
+
+        return response()->json(['message'=>'Tidak ada data tracking untuk hawb '.$request->host],500);
     }
     protected function log_api($ip,$host,$agent)
     {
