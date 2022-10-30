@@ -9,10 +9,10 @@ bisa ambil contoh dari file ```.env.example``` untuk standard envirotment larave
 tambahkan beberapa konfigurasi pada file ```.env``` 
 
 - ```KD_GUDANG=MAU1``` kode gudang untuk mekonfigurasi gudang aplikasi bisa MAU1,MAU2,BGD1,....dst
-- ```OUTPUT_METHOD=api``` metode output nya, metode output terdapat dua metode ```local``` dan ```api`` 
+- ```OUTPUT_METHOD=api``` metode output nya, metode output terdapat dua metode ```local``` dan ```api``` 
 
-    ```local``` metode dari server lokal ke database traking di lokal juga, atau dari database yg ada di cloud dan database tracking nya di cloud juga. metode ini untuk satu flatform aplikasi cias dan traking nya.
-    ```api``` metode dari data di server lokal gudang di push status tracking nya ke cloud endpoint,
+    ```local``` : metode dari server lokal ke database traking di lokal juga, atau dari database yg ada di cloud dan database tracking nya di cloud juga. metode ini untuk satu flatform aplikasi cias dan traking nya.<br>
+    ```api``` : metode dari data di server lokal gudang di push status tracking nya ke cloud endpoint,
 - ```END_POINT=http://localhost:8000/api/``` endpoint api, jika metode api digunakan isi dengan ```null``` jika menggunakan metode ```local```
 - ``TOKEN_API=d51604b0b68c6da5cd04a5ab0b14f1998795e0baf6ae09a07066bae82c0002fe`` token api jika menggunakan metode api, isi dengan ``null`` jika lokal. Token api untuk memastikan token api di endpoint sama dengan token api di client lokal
 - ``NUMBER_OF_CONNECTION=2`` jika menggunakan lebih dari 1 koneksi ini harus di set, jika hanya menggunakan 1 koneksi database set ``null`` . Dalam contoh number_of_connection=2 berarti kita menggunakan 3 database koneksi, berikut contoh koneksi nya:
@@ -42,8 +42,8 @@ tambahkan beberapa konfigurasi pada file ```.env```
 
 Setelah membuat file envirotment jalankan perintah pada directory project anda:
 
-``php artisan install``
-``php artisan key-generate``
+``php artisan install``<br>
+``php artisan key-generate``<br>
 ``php artisan migrate``
 
 - Jalanin crontab nya
