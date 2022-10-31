@@ -8,6 +8,8 @@ use App\Models\Warehouse\EksStorage;
 use App\Models\Warehouse\EksBuildupdetail;
 use App\Models\Warehouse\EksBuildupheader;
 use App\Repositories\ExportInputPortTrait;
+
+use App\Jobs\OutboundFactoryJob;
 /**
  * buat narik data export class
  */
@@ -153,18 +155,20 @@ class WarehouseExportInputPort extends WarehouseEntities
     {
         $this->c_file = 'counter/'.self::COUNT_EXP_MASTER;
         $limit = $this->count_data(EksMasterwaybill::class);
+        
         if($limit){
             $data = $this->get_master(EksMasterwaybill::class,$limit);
             if($data){
                 $result = [];
                 foreach ($data as $e) {
-                    $host = $this->get_host(EksHostawb::class,$e->MasterAWB);
-                    $this->debug_log(['outbound_factory master '.$host->count()],self::LOG);
+                    // $host = $this->get_host(EksHostawb::class,$e->MasterAWB); // where nya ngga jalan sial
+                    $host = EksHostawb::where('MasterAWB',$e->MasterAWB)->get();
+                    // $this->debug_log(['outbound_factory master '.$host->count()],self::LOG);
                     if($host){
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
                                 if($v->HostAWB){
-                                    $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
+                                    // $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
                                     $result[$i]['tps'] = env('KD_GUDANG');
                                     $result[$i]['gate_type'] = 'ekspor';
                                     $result[$i]['waybill_smu'] = $v->MasterAWB;
@@ -182,12 +186,13 @@ class WarehouseExportInputPort extends WarehouseEntities
                                     $result[$i]['_is_active'] = 1;
                                     $result[$i]['_created_by'] = 'MY_APP';
                                     // $result[$i]['full_check'] = 1;
+                                    OutboundFactoryJob::dispatch($result);
                                 }
                             }                            
                         }
                     }                    
                 }
-                return $result;
+                // return $result;
             }
         }
 
