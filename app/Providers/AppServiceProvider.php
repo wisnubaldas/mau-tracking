@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Repositories;
+use App\Repositories\WarehouseExportOutputPort;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(WarehouseExportOutputPort::class,function($app){
+            return new WarehouseExportOutputPort();
+        });
         // $this->app->bind(
         //     Repositories\WarehouseFactoryInterface::class,
         //     Repositories\WarehouseEntities::class,
