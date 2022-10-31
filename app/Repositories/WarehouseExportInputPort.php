@@ -163,24 +163,26 @@ class WarehouseExportInputPort extends WarehouseEntities
                     if($host){
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
-                                $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
-                                $result[$i]['tps'] = env('KD_GUDANG');
-                                $result[$i]['gate_type'] = 'ekspor';
-                                $result[$i]['waybill_smu'] = $v->MasterAWB;
-                                $result[$i]['hawb'] = $v->HostAWB;
-                                $result[$i]['koli'] = $v->Quantity;
-                                $result[$i]['netto'] = $v->Weight;
-                                $result[$i]['volume'] = $v->Volume;
-                                $result[$i]['kindofgood'] = $v->DescriptionGoods;
-                                $result[$i]['airline_code'] = $v->airlinescode;
-                                $result[$i]['flight_no'] = $v->FlightNo;
-                                $result[$i]['origin'] = $e->Origin;
-                                $result[$i]['dest'] = $e->Destination;
-                                $result[$i]['shipper_name'] = $v->shippername;
-                                $result[$i]['consignee_name'] = $v->Consigneename;
-                                $result[$i]['_is_active'] = 1;
-                                $result[$i]['_created_by'] = 'MY_APP';
-                                // $result[$i]['full_check'] = 1;
+                                if($v->HostAWB){
+                                    $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
+                                    $result[$i]['tps'] = env('KD_GUDANG');
+                                    $result[$i]['gate_type'] = 'ekspor';
+                                    $result[$i]['waybill_smu'] = $v->MasterAWB;
+                                    $result[$i]['hawb'] = $v->HostAWB;
+                                    $result[$i]['koli'] = $v->Quantity;
+                                    $result[$i]['netto'] = $v->Weight;
+                                    $result[$i]['volume'] = $v->Volume;
+                                    $result[$i]['kindofgood'] = $v->DescriptionGoods;
+                                    $result[$i]['airline_code'] = $v->airlinescode;
+                                    $result[$i]['flight_no'] = $v->FlightNo;
+                                    $result[$i]['origin'] = $e->Origin;
+                                    $result[$i]['dest'] = $e->Destination;
+                                    $result[$i]['shipper_name'] = $v->shippername;
+                                    $result[$i]['consignee_name'] = $v->Consigneename;
+                                    $result[$i]['_is_active'] = 1;
+                                    $result[$i]['_created_by'] = 'MY_APP';
+                                    // $result[$i]['full_check'] = 1;
+                                }
                             }                            
                         }
                     }                    
