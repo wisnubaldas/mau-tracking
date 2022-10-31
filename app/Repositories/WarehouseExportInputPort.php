@@ -116,8 +116,8 @@ class WarehouseExportInputPort extends WarehouseEntities
                     $master = $this->get_master_where(EksMasterwaybill::class,$i);
                     if($master){
                         foreach ($v as $h) {
+                            $this->debug_log(['outbound_factory_detail dapet hostnya '.$h->HostAWB],self::LOG);
                             $jml_host++;
-
                             $result[$jml_host]['tps'] = env('KD_GUDANG');
                             $result[$jml_host]['gate_type'] = 'ekspor';
                             $result[$jml_host]['waybill_smu'] = $h->MasterAWB;
@@ -133,6 +133,8 @@ class WarehouseExportInputPort extends WarehouseEntities
                             $result[$jml_host]['shipper_name'] = $h->shippername;
                             $result[$jml_host]['consignee_name'] = $h->Consigneename;
                             $result[$jml_host]['_is_active'] = 1;
+                            $result[$i]['_created_by'] = 'MY_APP';
+
                             // $result[$i]['full_check'] = 1;
                             
                         }
@@ -157,11 +159,11 @@ class WarehouseExportInputPort extends WarehouseEntities
                 $result = [];
                 foreach ($data as $e) {
                     $host = $this->get_host(EksHostawb::class,$e->MasterAWB);
-                    $this->debug_log(['outbound_factory master '.$e->MasterAWB],self::LOG);
+                    $this->debug_log(['outbound_factory master '.$host->count()],self::LOG);
                     if($host){
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
-                                $this->debug_log(['outbound_factory dapet hostnya '.$e->HostAWB],self::LOG);
+                                $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
                                 $result[$i]['tps'] = env('KD_GUDANG');
                                 $result[$i]['gate_type'] = 'ekspor';
                                 $result[$i]['waybill_smu'] = $v->MasterAWB;
@@ -177,6 +179,7 @@ class WarehouseExportInputPort extends WarehouseEntities
                                 $result[$i]['shipper_name'] = $v->shippername;
                                 $result[$i]['consignee_name'] = $v->Consigneename;
                                 $result[$i]['_is_active'] = 1;
+                                $result[$i]['_created_by'] = 'MY_APP';
                                 // $result[$i]['full_check'] = 1;
                             }                            
                         }
