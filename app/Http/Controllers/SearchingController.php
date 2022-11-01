@@ -42,7 +42,11 @@ class SearchingController extends Controller
             return response()->json($outbound,200);
         }
 
-        return response()->json(['message'=>'Tidak ada data tracking untuk hawb '.$request->host],500);
+        return response()->json([
+                                    'status'=>'failed',
+                                    'message'=>'Tidak ada data tracking untuk hawb '.$request->host,
+                                    'data'=>null
+                                ],500);
     }
     protected function log_api($ip,$host,$agent)
     {
