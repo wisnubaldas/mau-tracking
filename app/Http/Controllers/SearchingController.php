@@ -33,7 +33,7 @@ class SearchingController extends Controller
         if($inbound){
 
             return response()->json([
-                                        'status'=>'failed',
+                                        'status'=>'success',
                                         'message'=>'Tracking hawb '.$request->host,
                                         'data'=>$inbound
                                     ],200);
@@ -45,7 +45,7 @@ class SearchingController extends Controller
 
         if($outbound){
             return response()->json([
-                                        'status'=>'failed',
+                                        'status'=>'success',
                                         'message'=>'Tracking hawb '.$request->host,
                                         'data'=>$outbound
                                     ],200);
