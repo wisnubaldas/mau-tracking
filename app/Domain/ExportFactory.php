@@ -52,8 +52,8 @@ class ExportFactory
     protected function mapping_th_outbound_host()
     {
         $data = $this->inputPort->outbound_factory_detail();
-        if($data)
-            $this->outputPort->save_outbound($data);
+        // if($data)
+        //     $this->outputPort->save_outbound($data);
         return $this;
     }
     protected function mapping_th_outbound()
@@ -67,8 +67,8 @@ class ExportFactory
     static public function run()
     {
         $fk = new ExportFactory;
-        $fk->mapping_th_outbound();
-            // ->mapping_th_outbound_host()
+        $fk->mapping_th_outbound()
+            ->mapping_th_outbound_host();
             // ->mapping_td_outbond_acceptance()
             // ->mapping_td_outbond_weighing()
             // ->mapping_to_td_outbond_storage()

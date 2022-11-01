@@ -8,7 +8,7 @@ use App\Models\Warehouse\EksStorage;
 use App\Models\Warehouse\EksBuildupdetail;
 use App\Models\Warehouse\EksBuildupheader;
 use App\Repositories\ExportInputPortTrait;
-
+use App\Driver\TimeTrait;
 use App\Jobs\OutboundFactoryJob;
 /**
  * buat narik data export class
@@ -33,7 +33,7 @@ class WarehouseExportInputPort extends WarehouseEntities
     const C_BUILDUP = 'EXP_BUILDUP';
     const LOG = 'export.log';
     
-    use ExportInputPortTrait;
+    use ExportInputPortTrait, TimeTrait;
     
     public function buildup()
     {
@@ -109,6 +109,7 @@ class WarehouseExportInputPort extends WarehouseEntities
         $this->c_file = 'counter/'.self::COUNT_EXP_DETAIL;
         $limit = $this->count_data(EksHostawb::class);
         if($limit){
+            $this->awal(); // cek durasi eksekusi
             $data = $this->get_host(EksHostawb::class,$limit);
             if($data){
                 $jml_host = 0;
@@ -136,8 +137,8 @@ class WarehouseExportInputPort extends WarehouseEntities
                             $result[$jml_host]['consignee_name'] = $h->Consigneename;
                             $result[$jml_host]['_is_active'] = 1;
                             $result[$i]['_created_by'] = 'MY_APP';
-
                             // $result[$i]['full_check'] = 1;
+                            OutboundFactoryJob::dispatch($result);
                             
                         }
                     }else{
@@ -146,8 +147,10 @@ class WarehouseExportInputPort extends WarehouseEntities
                 }
 
                 $this->info_log(['outhbound export detail master, '.$jml_host.' host bisa di proses'],self::LOG);
-                return $result;
+                // return $result;
             }
+            $this->akhir();
+            $this->debug_log(['durasi eksekusi outbound_factory '. $this->durasi()],'export.log');
         }
         
     }
@@ -157,6 +160,7 @@ class WarehouseExportInputPort extends WarehouseEntities
         $limit = $this->count_data(EksMasterwaybill::class);
         
         if($limit){
+            $this->awal(); // cek durasi eksekusi
             $data = $this->get_master(EksMasterwaybill::class,$limit);
             if($data){
                 $result = [];
@@ -168,7 +172,7 @@ class WarehouseExportInputPort extends WarehouseEntities
                         if($host->count() > 0){
                             foreach ($host as $i => $v) {
                                 if($v->HostAWB){
-                                    // $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
+                                    $this->debug_log(['outbound_factory dapet hostnya '.$v->HostAWB],self::LOG);
                                     $result[$i]['tps'] = env('KD_GUDANG');
                                     $result[$i]['gate_type'] = 'ekspor';
                                     $result[$i]['waybill_smu'] = $v->MasterAWB;
@@ -192,8 +196,10 @@ class WarehouseExportInputPort extends WarehouseEntities
                         }
                     }                    
                 }
-                // return $result;
+                $this->akhir();
+                $this->debug_log(['durasi eksekusi outbound_factory '. $this->durasi()],'export.log');
             }
+            
         }
 
     }

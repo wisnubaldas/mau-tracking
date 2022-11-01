@@ -11,7 +11,7 @@ trait TimeTrait {
         $hours = floor($seconds / 3600);
         $mins = floor($seconds / 60 % 60);
         $secs = floor($seconds % 60);
-        return $hours.":".$mins.":".$secs;
+        return $hours." Jam, ".$mins." Menit, ".$secs." Detik";
 
     }
     public function akhir()
