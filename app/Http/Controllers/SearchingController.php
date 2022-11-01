@@ -31,7 +31,12 @@ class SearchingController extends Controller
                         ->where('hawb',$request->host)
                         ->first();
         if($inbound){
-            return response()->json($inbound,200);
+
+            return response()->json([
+                                        'status'=>'failed',
+                                        'message'=>'Tracking hawb '.$request->host,
+                                        'data'=>$inbound
+                                    ],200);
         }
         $outbound = ThOutbound::with(['acceptance','weighing','manifest',
                                         'storage','buildup','staging','aircarft'])
@@ -39,7 +44,11 @@ class SearchingController extends Controller
                             ->first();
 
         if($outbound){
-            return response()->json($outbound,200);
+            return response()->json([
+                                        'status'=>'failed',
+                                        'message'=>'Tracking hawb '.$request->host,
+                                        'data'=>$outbound
+                                    ],200);
         }
 
         return response()->json([
