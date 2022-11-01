@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         {
             DB::listen(function ($query){
                 $bindings = json_encode($query->bindings);
-                $konek = json_encode(DB::connection());
+                $konek = json_encode(DB::connection()->getPdo());
                 Log::build([
                     'driver' => 'single',
                     'path' => storage_path('logs/query.log'),
