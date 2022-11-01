@@ -44,11 +44,11 @@ class AppServiceProvider extends ServiceProvider
         {
             DB::listen(function ($query){
                 $bindings = json_encode($query->bindings);
-                $konek = json_encode(DB::connection()->getPdo());
+                $konek = DB::connection()->getPdo();
                 Log::build([
                     'driver' => 'single',
                     'path' => storage_path('logs/query.log'),
-                  ])->info("$query->sql|$bindings|$query->time"." koneksi ke ".$konek);
+                  ])->info("$query->sql|$bindings|$query->time|$konek");
               });
         }
         
