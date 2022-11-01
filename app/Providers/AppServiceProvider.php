@@ -40,11 +40,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Log::useFiles(storage_path() . '/logs/query.log');
-        DB::listen(function ($query){
-            $bindings = json_encode($query->bindings);
-            Log::info("$query->sql|$bindings|$query->time");
-          });
+        if(DB::connection()->getDatabaseName())
+        {
+            DB::listen(function ($query){
+                $bindings = json_encode($query->bindings);
+                $konek = json_encode(DB::connection());
+                Log::build([
+                    'driver' => 'single',
+                    'path' => storage_path('logs/query.log'),
+                  ])->info("$query->sql|$bindings|$query->time"." koneksi ke ".$konek);
+              });
+        }
+        
     }
     
 
