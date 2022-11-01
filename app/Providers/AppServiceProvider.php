@@ -5,7 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories;
 use App\Repositories\WarehouseExportOutputPort;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -39,7 +40,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Log::useFiles(storage_path() . '/logs/query.log');
+        DB::listen(function ($query){
+            $bindings = json_encode($query->bindings);
+            Log::info("$query->sql|$bindings|$query->time");
+          });
     }
     
 
