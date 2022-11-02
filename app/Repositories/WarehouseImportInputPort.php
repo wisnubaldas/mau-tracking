@@ -101,7 +101,6 @@ class WarehouseImportInputPort extends WarehouseEntities {
     public function inbound_factory()
     {
         $this->c_file = 'counter/'.self::FILE_COUNTER_MASTER;
-
         $limit = $this->count_data(ImpHostAwb::class);
         $data = $this->get_master(ImpHostAwb::class,$limit);
         if($data){
