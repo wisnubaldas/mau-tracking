@@ -87,12 +87,11 @@ class WarehouseExportOutputPort extends WarehouseEntities{
     public function save_outbound($data)
     {
         foreach ($data as $v) {
-		
-            $this->debug_log(['message'=>$v]);
-            dd(); 
-            $head = ['waybill_smu'=>$v['waybill_smu'],'hawb'=>$v['hawb']];
-            ThOutbound::updateOrCreate($head,$v);
-            $this->debug_log(['message'=>'Input th_outbound hawb '.$v['hawb']]);                
+            if(isset($v['waybill_smu']) || $v['waybill_smu'] != ''){
+                $head = ['waybill_smu'=>$v['waybill_smu'],'hawb'=>$v['hawb']];
+                ThOutbound::updateOrCreate($head,$v);
+                $this->debug_log(['message'=>'Input th_outbound hawb '.$v['hawb']]); 
+            }
         }
     }
     protected function get_id_by_master($mawb)
