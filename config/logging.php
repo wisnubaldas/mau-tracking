@@ -55,6 +55,7 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
+            'permission'=>0777,
         ],
 
         'single' => [
@@ -94,6 +95,7 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
+            'permission'=>0777,
             'with' => [
                 'stream' => 'php://stderr',
             ],
@@ -102,20 +104,24 @@ return [
         'syslog' => [
             'driver' => 'syslog',
             'level' => env('LOG_LEVEL', 'debug'),
+            'permission'=>0777,
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
+            'permission'=>0777,
         ],
 
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
+            'permission'=>0777,
         ],
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+            'permission'=>0777,
         ],
     ],
 

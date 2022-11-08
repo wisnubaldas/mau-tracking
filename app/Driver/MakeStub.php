@@ -15,7 +15,7 @@ trait MakeStub
      */
     public function getStubPath()
     {
-        return base_path('stubs/interface.stub');
+        return base_path('stubs/'.$this->stub_name);
     }
 
     /**
@@ -28,7 +28,7 @@ trait MakeStub
     public function getStubVariables()
     {
         return [
-            'NAMESPACE'         => 'App\\Contract',
+            'NAMESPACE'         => $this->name_space,
             'CLASS_NAME'        => $this->getSingularClassName($this->argument('name')),
         ];
     }
@@ -72,7 +72,7 @@ trait MakeStub
      */
     public function getSourceFilePath()
     {
-        return base_path('app/Contract') .'/' .$this->getSingularClassName($this->argument('name')) . '.php';
+        return $this->path_nya.'/' .$this->getSingularClassName($this->argument('name')) . '.php';
     }
 
     /**

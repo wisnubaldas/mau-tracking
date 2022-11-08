@@ -1,0 +1,21 @@
+<?php
+namespace App\{{NAMESPACE}};
+
+/**
+*
+* The name and signature of the console command.
+*
+*/
+
+class {{CLASS_NAME}} {
+    
+    public function __construct() {
+        
+    }
+
+    
+    public function some_function():void
+    {
+        
+    }
+}

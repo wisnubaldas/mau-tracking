@@ -3,11 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Pluralizer;
+use App\Driver\MakeStub;
 use Illuminate\Filesystem\Filesystem;
 
-use App\Driver\MakeStub;
-class ContractCommand extends Command
+class RepositoriesCommand extends Command
 {
     use MakeStub;
     protected $stub_name;
@@ -18,23 +17,23 @@ class ContractCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:contract {name}';
+    protected $signature = 'make:repo {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Bikin contract interface';
+    protected $description = 'Perintah bikin repositories laravel';
 
     public function __construct(Filesystem $files)
     {
         parent::__construct();
 
         $this->files = $files;
-        $this->stub_name = 'interface.stub';
-        $this->name_space = 'App\\Contract';
-        $this->path_nya = base_path('app/Contract');
+        $this->stub_name = 'repo.stub';
+        $this->name_space = 'App\\Repositories';
+        $this->path_nya = base_path('app/Repositories');
     }
     /**
      * Execute the console command.
@@ -52,7 +51,6 @@ class ContractCommand extends Command
         } else {
             $this->info("File : {$path} already exits");
         }
-
         return Command::SUCCESS;
     }
 }
