@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         if(env('NUMBER_OF_CONNECTION') !== null && env('NUMBER_OF_CONNECTION') !== '')
         {
             $this->mergeConfigFrom(
-                __DIR__.'/../../config/connection.php','database.connections'
+                base_path('config/connection.php'),'database.connections'
             );
         }
 
