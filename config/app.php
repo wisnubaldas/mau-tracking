@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -185,7 +185,10 @@ return [
         /*
          * Package Service Providers...
          */
-        Aws\Laravel\AwsServiceProvider::class,
+
+        // bikin manual dulu kalo di pasang di folder custom laravel
+        Wisnubaldas\CleanClass\CleanClassServiceProfider::class,
+        
         /*
          * Application Service Providers...
          */
@@ -194,7 +197,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\TrackingServiceProvider::class,
+
     ],
 
     /*

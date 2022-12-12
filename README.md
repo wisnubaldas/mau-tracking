@@ -1,54 +1,66 @@
-# API TRACKING UNTUK CIAS SYSTEM
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-### User Guide
-### Cara install
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-Clone repo dari gitlab ```https://gitlab.att.id/mau/api-tracking.git``` 
-setelah berhasil cloning project buat file ```.env``` untuk konfigurasi envirotmentnya,
-bisa ambil contoh dari file ```.env.example``` untuk standard envirotment laravel
-tambahkan beberapa konfigurasi pada file ```.env``` 
+## About Laravel
 
-- ```KD_GUDANG=MAU1``` kode gudang untuk mekonfigurasi gudang aplikasi bisa MAU1,MAU2,BGD1,....dst
-- ```OUTPUT_METHOD=api``` metode output nya, metode output terdapat dua metode ```local``` dan ```api``` 
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-    ```local``` : metode dari server lokal ke database traking di lokal juga, atau dari database yg ada di cloud dan database tracking nya di cloud juga. metode ini untuk satu flatform aplikasi cias dan traking nya.<br>
-    ```api``` : metode dari data di server lokal gudang di push status tracking nya ke cloud endpoint,
-- ```END_POINT=http://localhost:8000/api/``` endpoint api, jika metode api digunakan isi dengan ```null``` jika menggunakan metode ```local```
-- ``TOKEN_API=d51604b0b68c6da5cd04a5ab0b14f1998795e0baf6ae09a07066bae82c0002fe`` token api jika menggunakan metode api, isi dengan ``null`` jika lokal. Token api untuk memastikan token api di endpoint sama dengan token api di client lokal
-- ``NUMBER_OF_CONNECTION=2`` jika menggunakan lebih dari 1 koneksi ini harus di set, jika hanya menggunakan 1 koneksi database set ``null`` . Dalam contoh number_of_connection=2 berarti kita menggunakan 3 database koneksi, berikut contoh koneksi nya:
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-    ```bash
-        DB_CONNECTION=mysql
-        DB_HOST=127.0.0.1
-        DB_PORT=3306
-        DB_DATABASE=api_tracking
-        DB_USERNAME=admin
-        DB_PASSWORD=password
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-        DB_CONNECTION_1=rdwarehouse_jkt
-        DB_HOST_1=127.0.0.1
-        DB_PORT_1=3306
-        DB_DATABASE_1=rdwarehouse_jkt
-        DB_USERNAME_1=admin
-        DB_PASSWORD_1=password
+## Learning Laravel
 
-        DB_CONNECTION_2=db_tpsonline
-        DB_HOST_2=127.0.0.1
-        DB_PORT_2=3306
-        DB_DATABASE_2=db_tpsonline
-        DB_USERNAME_2=admin
-        DB_PASSWORD_2=password
-    ```
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-Setelah membuat file envirotment jalankan perintah pada directory project anda:
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-``php artisan install``<br>
-``php artisan key-generate``<br>
-``php artisan migrate``
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-- Jalanin crontab nya
+## Laravel Sponsors
 
-```* * * * * cd /your-project-path && php artisan schedule:run >> /dev/null 2>&1```
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-- cek log 
-``` http://localhost:8000/log-viewer ```
+### Premium Partners
+
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[OP.GG](https://op.gg)**
+- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+- **[Lendio](https://lendio.com)**
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

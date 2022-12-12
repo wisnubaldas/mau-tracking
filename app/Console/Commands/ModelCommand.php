@@ -3,23 +3,22 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Domain\SearchFactory;
 
-class SearchFactoryCommand extends Command
+class ModelCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:search_factory';
+    protected $signature = 'make:crot';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate data search dari table2 tps';
+    protected $description = 'Kostum command model';
 
     /**
      * Execute the console command.
@@ -28,7 +27,6 @@ class SearchFactoryCommand extends Command
      */
     public function handle()
     {
-        SearchFactory::run();
-        return 0;
+        return Command::SUCCESS;
     }
 }

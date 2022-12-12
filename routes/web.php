@@ -14,9 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // $value = config('database');
-    // dd($value);
-    
-    // return redirect('/api/doc');
     return view('welcome');
 });
